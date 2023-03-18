@@ -1,19 +1,18 @@
 import 'package:event/components/logo_text.dart';
-import 'package:event/pages/register_page.dart';
 import 'package:event/responsive/desktopBody.dart';
 import 'package:event/responsive/mobileBody.dart';
 import 'package:event/responsive/responsiveLayout.dart';
 import 'package:flutter/material.dart';
 
-class LoginPage extends StatefulWidget {
-  LoginPage({Key? key}) : super(key: key);
+class RegisterPage extends StatefulWidget {
 
   @override
-  State<LoginPage> createState() => _LoginPageState();
+  State<RegisterPage> createState() => _RegisterPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _RegisterPageState extends State<RegisterPage> {
   final formKey = GlobalKey<FormState>(); // key para el formulario
+  String _password = "";
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +24,7 @@ class _LoginPageState extends State<LoginPage> {
         mobileBody: MobileBody(
           body: Scaffold(
             body: SingleChildScrollView(
-              physics: NeverScrollableScrollPhysics(),
+              // physics: NeverScrollableScrollPhysics(),
               child: Column(
                 children: [
                   Padding(padding: EdgeInsets.all(currentHeight * 0.075)),
@@ -47,6 +46,33 @@ class _LoginPageState extends State<LoginPage> {
                           //FORMULARIOS
                           Column(
                             children: [
+                              Align(
+                                alignment: Alignment.centerLeft,
+                                child: Text('Nombres y Apellidos', style: TextStyle(fontFamily: 'RobotoSerif', fontSize: 16)),
+                              ),
+
+                              SizedBox(height: currentHeight * 0.005),
+                              
+                              TextFormField(
+                                style: TextStyle(fontFamily: 'RobotoSerif'),
+                                decoration: InputDecoration(
+                                  hintText: 'Ingrese sus nombres y apellidos',
+                                  border: OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(15))),
+                                  filled: true,
+                                  fillColor: Colors.grey[400],
+                                ),
+                                cursorColor: Colors.black,
+                                validator: (value) {
+                                  if(value!.isEmpty || !RegExp(r'^[a-z A-Z]+$').hasMatch(value)){
+                                    return 'Ingresa un nombre correcto.';
+                                  } else {
+                                    return null;
+                                  }
+                                }
+                              ),
+
+                              SizedBox(height: currentHeight * 0.005),
+
                               Align(
                                 alignment: Alignment.centerLeft,
                                 child: Text('Correo Electrónico', style: TextStyle(fontFamily: 'RobotoSerif', fontSize: 16)),
@@ -91,9 +117,44 @@ class _LoginPageState extends State<LoginPage> {
                                   fillColor: Colors.grey[400],
                                 ),
                                 cursorColor: Colors.black,
+                                onChanged: (value){
+                                  setState(() {
+                                    _password = value;
+                                  });
+                                },
                                 validator: (value) {
                                   if(value!.isEmpty || !RegExp(r'^(?=.*[a-z])(?=.*\d)[a-zA-Z\d]{8,}$').hasMatch(value)){
                                     return 'Mínimo 8 carácteres y al menos un número.';
+                                  } else {
+                                    return null;
+                                  }
+                                }
+                              ),
+
+                              SizedBox(height: currentHeight * 0.005),
+
+                              Align(
+                                alignment: Alignment.centerLeft,
+                                child: Text('Confirmar Contraseña', style: TextStyle(fontFamily: 'RobotoSerif', fontSize: 16)),
+                              ),
+
+                              SizedBox(height: currentHeight * 0.005),
+                              
+                              TextFormField(
+                                style: TextStyle(fontFamily: 'RobotoSerif'),
+                                obscureText: true,
+                                decoration: InputDecoration(
+                                  hintText: 'Ingrese su contraseña',
+                                  border: OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(15))),
+                                  filled: true,
+                                  fillColor: Colors.grey[400],
+                                ),
+                                cursorColor: Colors.black,
+                                validator: (value) {
+                                  if(value!.isEmpty || !RegExp(r'^(?=.*[a-z])(?=.*\d)[a-zA-Z\d]{8,}$').hasMatch(value)){
+                                    return 'Mínimo 8 carácteres y al menos un número.';
+                                  } else if (value != _password) {
+                                    return 'Ambas contraseñas deben coincidir';
                                   } else {
                                     return null;
                                   }
@@ -117,28 +178,6 @@ class _LoginPageState extends State<LoginPage> {
                                       SnackBar(content: Text('Funciona'))
                                     );
                                   }
-                                }, 
-                                child: Text('Iniciar sesión', style: TextStyle(color: Colors.black, fontFamily: 'RobotoSerif'))
-                              ),
-                            ),
-                          ),
-                          SizedBox(height: currentHeight * 0.001),
-                          Center(
-                            child: Padding(
-                              padding: const EdgeInsets.only(left: 25, right: 25),
-                              child: ElevatedButton(
-                                style: ElevatedButton.styleFrom(
-                                  side: BorderSide(
-                                    width: 0.5,
-                                    color: Colors.black
-                                  ),
-                                  primary: Colors.white,
-                                  minimumSize: Size.fromHeight(currentHeight * 0.05)
-                                ),
-                                onPressed: (){
-                                  Navigator.push(context,
-                                    MaterialPageRoute(builder: (context) => RegisterPage())
-                                  );
                                 }, 
                                 child: Text('Registrarme', style: TextStyle(color: Colors.black, fontFamily: 'RobotoSerif'))
                               ),
@@ -165,5 +204,3 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 }
-        
-        
